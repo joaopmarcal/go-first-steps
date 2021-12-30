@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"bufio"
 )
 
 const monitoramentos = 3
@@ -100,6 +101,15 @@ func leSitesDoArquivo() []string {
 		fmt.Println("Ocorreu um erro:", err)
 	}
 
-	fmt.Println(arquivo)
+	leitor := bufio.NewReader(arquivo)
+
+	linha, err := leitor.ReadString('\n')
+
+	if err != nil {
+		fmt.Println("Ocorreu um erro:", err)
+	}
+
+	fmt.Println(linha)
+
 	return sites
 }
