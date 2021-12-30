@@ -13,6 +13,7 @@ const delay = 5
 func main() {
 
 	exibeIntroducao()
+	leSitesDoArquivo()
 	for {
 		exibeMenu()
 
@@ -58,7 +59,9 @@ func leComando() int {
 
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
-	sites := []string{"https://random-status-code.herokuapp.com/","https://www.alura.com.br/","https://www.caelum.com.br/"}
+
+	//sites := []string{"https://random-status-code.herokuapp.com/","https://www.alura.com.br/","https://www.caelum.com.br/"}
+	sites := leSitesDoArquivo()
 
 	for i:= 0; i < monitoramentos ; i++{
 		for i, site := range sites {
@@ -81,4 +84,13 @@ func testaSite(site string){
 	} else {
 		fmt.Println("Site:", site, "esta com problemas. Status Code:", resp.StatusCode)
 	}
+}
+
+func leSitesDoArquivo() []string {
+
+	var sites []string
+
+	arquivo, _ := os.Open("sites.txt")
+	fmt.Println(arquivo)
+	return sites
 }
