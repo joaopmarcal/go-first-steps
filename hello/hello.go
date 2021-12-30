@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
-	"bufio"
 )
 
 const monitoramentos = 3
@@ -14,7 +16,6 @@ const delay = 5
 func main() {
 
 	exibeIntroducao()
-	leSitesDoArquivo()
 	for {
 		exibeMenu()
 
@@ -61,7 +62,6 @@ func leComando() int {
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
 
-	//sites := []string{"https://random-status-code.herokuapp.com/","https://www.alura.com.br/","https://www.caelum.com.br/"}
 	sites := leSitesDoArquivo()
 
 	for i:= 0; i < monitoramentos ; i++{
@@ -102,14 +102,16 @@ func leSitesDoArquivo() []string {
 	}
 
 	leitor := bufio.NewReader(arquivo)
+	for {
+		linha, err := leitor.ReadString('\n')
+		linha = strings.TrimSpace(linha)		
+		sites = append(sites, linha)
 
-	linha, err := leitor.ReadString('\n')
-
-	if err != nil {
-		fmt.Println("Ocorreu um erro:", err)
+		if err == io.EOF {
+			break
+		}
 	}
-
-	fmt.Println(linha)
+	arquivo.Close()
 
 	return sites
 }
